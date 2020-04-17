@@ -1,9 +1,9 @@
 # CEPDOF_tools
-Python code for visualizing and evaluating on the CEPDOF dataset `!!TODO!! link to the dataset page`.
+Python code for visualizing and evaluating on the [CEPDOF dataset](http://vip.bu.edu/cepdof/).
 
 
 # Annotation Format
-CEPDOF's annotation format follows the [COCO dataset](http://cocodataset.org/#home) convention. `/CEPDOF_sample` is a toy sample of the CEPDOF dataset. Please refer to the dataset page `!!TODO!! link to the dataset page` for more details.
+CEPDOF's annotation format follows the [COCO dataset](http://cocodataset.org/#home) convention. `/CEPDOF_sample` is a toy sample of the CEPDOF dataset. Please refer to our dataset page shown above for more details.
 
 # CEPDOF API Usage
 Put the `cepdof_api.py` in your working directory and make use of the functions in it. Some examples are described below.
