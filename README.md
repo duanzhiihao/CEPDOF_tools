@@ -1,6 +1,5 @@
 # CEPDOF_tools
-Python code for visualizing and evaluating on the [CEPDOF dataset](http://vip.bu.edu/cepdof/).
-
+The Python software toolkit for bounding-box visualization and algorithm evaluation on the [CEPDOF dataset](http://vip.bu.edu/cepdof/).
 
 # Annotation Format
 CEPDOF's annotation format follows the [COCO dataset](http://cocodataset.org/#home) convention. `/CEPDOF_sample` is a toy sample of the CEPDOF dataset. Please refer to our dataset page shown above for more details.
