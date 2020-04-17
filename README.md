@@ -22,4 +22,8 @@ Our evaluation code is built upon `pycocotools` so the usage is similar to it, e
 `!!TO DO!!` For backward compatibility, we will release code for evaluation on the [HABBOF](https://vip.bu.edu/habbof/) dataset.
 
 # Citation
-`!!TODO!!`
+You may use this dataset for non-commercial purposes. If you publish any work reporting results using this dataset, please cite the following paper:
+
+`
+Z. Duan, M.O. Tezcan, H. Nakamura, P. Ishwar and J. Konrad, “RAPiD: Rotation-Aware People Detection in Overhead Fisheye Images”, in IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), Omnidirectional Computer Vision in Research and Industry (OmniCV) Workshop, June 2020.
+`
