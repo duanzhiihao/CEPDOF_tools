@@ -9,7 +9,7 @@ Put the `cepdof_api.py` in your working directory and make use of the functions 
 
 **Requirements:**
 - opencv-python
-- [pycocotools](https://github.com/cocodataset/cocoapi)
+- [pycocotools](https://github.com/cocodataset/cocoapi) (for Windows users, please refer to [this GitHub repo](https://github.com/maycuatroi/pycocotools-window))
 
 # Visualization
 An exmaple for parsing and visualizing the annotations is provided in [visualize_demo.ipynb](https://github.com/duanzhiihao/CEPDOF_tools/blob/master/visualize_demo.ipynb).
