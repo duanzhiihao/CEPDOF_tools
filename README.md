@@ -13,13 +13,13 @@ Put the `cepdof_api.py` in your working directory and make use of the functions 
 - [pycocotools](https://github.com/cocodataset/cocoapi) (for Windows users, please refer to [this GitHub repo](https://github.com/maycuatroi/pycocotools-window))
 
 ## Visualization
-An exmaple for parsing and visualizing the annotations is provided in [visualize_demo.ipynb](https://github.com/duanzhiihao/CEPDOF_tools/blob/master/visualize_demo.ipynb).
+Exmaple code for parsing and visualizing the annotations is provided in [visualize_demo.ipynb](https://github.com/duanzhiihao/CEPDOF_tools/blob/master/visualize_demo.ipynb).
 
 ## Evaluation on CEPDOF
-Our evaluation code is built upon `pycocotools` so the usage is similar to it, except that we require `[cx, cy, w, h, degree (clockwise)]` for each bounding box. An exapmle for evaluation on CEPDOF is provided in [eval_demo.ipynb](https://github.com/duanzhiihao/CEPDOF_tools/blob/master/eval_demo.ipynb). The detection results should be in the JSON format like `video_0_results.json`.
+Our evaluation code is built upon [pycocotools](https://github.com/cocodataset/cocoapi) so the usage is similar to it, except that we use `[cx, cy, w, h, degree (clockwise)]` instead of `[x1, y1, w, h]` for each bounding box. The detection results should be in the JSON format as in `video_0_results.json`. Example code for evaluation on CEPDOF is provided in [eval_demo.ipynb](https://github.com/duanzhiihao/CEPDOF_tools/blob/master/eval_demo.ipynb). 
 
 ## Evaluation on HABBOF
 **!!TO DO!!** For backward compatibility, we will release code for evaluation on the [HABBOF](https://vip.bu.edu/habbof/) dataset.
 
 ## Citation
-If you publish any work reporting results on the CEPDOF or HABBOF dataset, please cite the corresponding paper.
+If you publish any work reporting results on the CEPDOF or the HABBOF dataset, please cite the corresponding paper.
