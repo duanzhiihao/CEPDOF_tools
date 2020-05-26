@@ -8,7 +8,57 @@ from pycocotools import mask as maskUtils
 
 
 class CEPDOFeval(cocoeval.COCOeval):
+    '''
+    Interface for evaluating detection on the CEPDOF dataset.
+    
+    The usage for CEPDOFeval is as follows (nearly identical to the COCO dataset API):
+     gt_data=..., dts_data=...       # load dataset and results
+     E = CocoEval(gt_data,dts_data)  # initialize CocoEval object
+     E.params.recThrs = ...          # set parameters as desired
+     E.evaluate()                    # run per image evaluation
+     E.accumulate()                  # accumulate per image results
+     E.summarize()                   # display summary metrics of results
+    For example usage see https://github.com/duanzhiihao/CEPDOF_tools
+    
+    The evaluation parameters are as follows (defaults in brackets):
+     imgIds     - [all] N img ids to use for evaluation
+     catIds     - NOTE: only support category_id=1, namely, 'person'
+     iouThrs    - [.5:.05:.95] T=10 IoU thresholds for evaluation
+     recThrs    - [0:.01:1] R=101 recall thresholds for evaluation
+     areaRng    - [...] A=4 object area ranges for evaluation
+     maxDets    - [1 10 100] M=3 thresholds on max detections per image
+     iouType    - NOTE: only support 'bbox'
+    Note: multiple areaRngs [Ax2] and maxDets [Mx1] can be specified.
+    
+    evaluate(): evaluates detections on every image and every category and
+    concats the results into the "evalImgs" with fields:
+     dtIds      - [1xD] id for each of the D detections (dt)
+     gtIds      - [1xG] id for each of the G ground truths (gt)
+     dtMatches  - [TxD] matching gt id at each IoU or 0
+     gtMatches  - [TxG] matching dt id at each IoU or 0
+     dtScores   - [1xD] confidence of each dt
+     gtIgnore   - [1xG] ignore flag for each gt
+     dtIgnore   - [TxD] ignore flag for each dt at each IoU
+    
+    accumulate(): accumulates the per-image, per-category evaluation
+    results in "evalImgs" into the dictionary "eval" with fields:
+     params     - parameters used for evaluation
+     date       - date evaluation was performed
+     counts     - [T,R,K,A,M] parameter dimensions (see above)
+     precision  - [TxRxKxAxM] precision for every evaluation setting
+     recall     - [TxKxAxM] max recall for every evaluation setting
+    Note: precision and recall==-1 for settings with no gt objects.
+    
+    See also eval_demo.ipynb
+    '''
     def __init__(self, gt_json, dt_json, iouType='bbox'):
+        '''
+        Args:
+            gt_json: if str, it should be the path to the annotation file.
+                     if dict, it should be the annotation json.
+            dt_json: if str, it should be the path to the detection file.
+                     if dict, it should be the detection json.
+        '''
         assert iouType == 'bbox', 'Only support (rotated) bbox iou type'
         self.gt_json = json.load(open(gt_json, 'r')) if isinstance(gt_json, str) \
                        else gt_json
@@ -67,7 +117,7 @@ class CEPDOFeval(cocoeval.COCOeval):
             dt=dt[0:p.maxDets[-1]]
 
         if p.iouType == 'segm':
-            raise NotImplementedError()
+            raise NotImplementedError('Do not support segmentation for now')
             g = [g['segmentation'] for g in gt]
             d = [d['segmentation'] for d in dt]
         elif p.iouType == 'bbox':
@@ -86,15 +136,22 @@ class CEPDOFeval(cocoeval.COCOeval):
         return ious
 
 
-def xywha2vertex(box, is_degree, stack=True):
+def xywha2vertex(box, is_degree):
     '''
+    Convert bounding boxes to vertices.
+    NOTE: if is_degree=True, the angle will be converted to radian **in-place**.
+
     Args:
-        box: tensor, shape(batch,5), 5=(cx, cy, w, h, degree)
+        box: tensor, shape(batch,5), 5 = [cx, cy, w, h, angle (clockwise)]
+        is_degree: whether the angle is degree or radian
 
     Return:
-        tensor, shape(batch,4,2): topleft, topright, bottomright, bottomleft
+        tensor, shape(batch,4,2): 4 = [topleft, topright, bottomright, bottomleft]
     '''
-    assert is_degree == False and box.ndim == 2 and box.shape[1] >= 5
+    assert box.ndim == 2 and box.shape[1] >= 5
+    if is_degree:
+        # convert to radian **in-place**
+        box[:, 4] = box[:, 4] * np.pi / 180
     batch = box.shape[0]
 
     center = box[:,0:2]
@@ -122,18 +179,17 @@ def iou_rle(boxes1, boxes2, img_size=2048):
     '''
     Use mask and Run Length Encoding to calculate IOU between rotated bboxes.
 
-    NOTE: rotated bounding boxes format is [cx, cy, w, h, degree].
+    NOTE: rotated bounding boxes format is [cx, cy, w, h, degree (clockwise)].
 
     Args:
-        boxes1: list[list[float]], shape[M,5], 5=(cx, cy, w, h, degree)
-        boxes2: list[list[float]], shape[N,5], 5=(cx, cy, w, h, degree)
+        boxes1: list[list[float]], shape[M,5], 5=[cx, cy, w, h, degree]
+        boxes2: list[list[float]], shape[N,5], 5=[cx, cy, w, h, degree]
         img_size: int or list, (height, width)
 
     Return:
         ious: np.array[M,N], ious of all bounding box pairs
     '''
     assert isinstance(boxes1, list) and isinstance(boxes2, list)
-    # convert bounding boxes to torch.tensor
     boxes1 = np.array(boxes1).reshape(-1, 5)
     boxes2 = np.array(boxes2).reshape(-1, 5)
     if boxes1.shape[0] == 0 or boxes2.shape[0] == 0:
@@ -143,9 +199,11 @@ def iou_rle(boxes1, boxes2, img_size=2048):
     boxes1[:,4] = boxes1[:,4] * np.pi / 180
     boxes2[:,4] = boxes2[:,4] * np.pi / 180
 
+    # Convert [cx,cy,w,h,angle] to verticies
     b1 = xywha2vertex(boxes1, is_degree=False).tolist()
     b2 = xywha2vertex(boxes2, is_degree=False).tolist()
     
+    # Calculate IoU using COCO API
     h, w = (img_size, img_size) if isinstance(img_size, int) else img_size
     b1 = maskUtils.frPyObjects(b1, h, w)
     b2 = maskUtils.frPyObjects(b2, h, w)
