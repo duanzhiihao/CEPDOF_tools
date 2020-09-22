@@ -25,5 +25,8 @@ Our evaluation code is built upon [pycocotools](https://github.com/cocodataset/c
 ## Evaluation on HABBOF
 Download [HABBOF](https://vip.bu.edu/habbof/) dataset, then convert the ground-truth labels to our JSON-format by running HABBOF_GtToJSON.py -p "<path_to_HABBOF>"
 
+## Evaluation on MirrorWorlds
+Follow the instructions [here](http://vip.bu.edu/projects/vsns/cossy/datasets/mw-r/) to download the dataset and annotations, then rename the frames with the renameMWImages.py script.
+
 ## Citation
 If you publish any work reporting results on the CEPDOF or the HABBOF dataset, please cite the corresponding paper.
