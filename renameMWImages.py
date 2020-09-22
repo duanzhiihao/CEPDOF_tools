@@ -1,6 +1,11 @@
 import os
+import argparse
 
-MW_path = "E:/MWAll/MW-R/MW-R/MW-R/"
+ap = argparse.ArgumentParser()
+ap.add_argument("-p", "--root_path", required=True)
+args, l = ap.parse_known_args()
+
+MW_path = args.root_path
 
 for vidname in os.listdir(MW_path):
     day = vidname.split("-")[-1]
