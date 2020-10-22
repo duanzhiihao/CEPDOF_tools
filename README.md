@@ -2,6 +2,7 @@
 This repository is the Python software toolkit for bounding-box visualization and algorithm evaluation on the [CEPDOF dataset](http://vip.bu.edu/cepdof/).
 
 ## Updates
+- [Oct 22, 2020]: Add instructions on evaluation on the HABBOF and MW-R dataset.
 - [May 26, 2020]: Update docstrings and comments. Functionality is unchanged.
 - [Apr 17, 2020]: Initial commit
 
