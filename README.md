@@ -23,7 +23,10 @@ Example code for parsing and visualizing the annotations is provided in [visuali
 Our evaluation code is built upon [pycocotools](https://github.com/cocodataset/cocoapi) so the usage is similar to it, except that we use **[cx,cy,w,h,degree (clockwise)]** instead of [x1,y1,w,h] for each bounding box. The detection results should be in the JSON format as in `video_0_results.json`. Example code for evaluation on CEPDOF is provided in [eval_demo.ipynb](https://github.com/duanzhiihao/CEPDOF_tools/blob/master/eval_demo.ipynb). 
 
 ## Evaluation on HABBOF
-**!!TO DO!!** For backward compatibility, we will release code for evaluation on the [HABBOF](https://vip.bu.edu/habbof/) dataset.
+Download [HABBOF](https://vip.bu.edu/habbof/) dataset, then convert the ground-truth labels to our JSON-format by running HABBOF_GtToJSON.py -p "<path_to_HABBOF>"
+
+## Evaluation on MirrorWorlds
+Follow the instructions [here](http://vip.bu.edu/projects/vsns/cossy/datasets/mw-r/) to download the dataset and annotations, then rename the frames with the renameMWImages.py script.
 
 ## Citation
 If you publish any work reporting results on the CEPDOF or the HABBOF dataset, please cite the corresponding paper.
